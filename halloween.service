@@ -1,0 +1,16 @@
+[Unit]
+Description=Halloween
+After=network.target
+#StartLimitAction=reboot
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+WorkingDirectory=/home/pi/halloween
+ExecStart=/bin/sh start.sh
+
+[Install]
+WantedBy=multi-user.target
+

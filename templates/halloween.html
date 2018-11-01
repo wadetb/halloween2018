@@ -1,0 +1,76 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<title>Halloween 2018</title>
+
+<style type="text/css">
+body { -webkit-touch-callout: none !important; }
+h1 { -webkit-user-select: none !important; }
+a { -webkit-user-select: none !important; }
+.box1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+.btn {
+    background: lightblue;
+    border-radius: 5px;
+    padding: 45px 5px;
+    font-size: xx-large;
+    text-align: center;
+}
+</style>
+
+<div class='box1'>
+{% for effect in effects %} 
+<button class='btn' id="{{ effect }}">{{ effect }}</button>
+{% endfor %}
+</div>
+
+<hr/>
+
+<a href="http://{{ local_ip }}:5000/">local ip</a>
+<a href="/wifi">wifi status</a>
+<a href="/bluetooth">bluetooth status</a>
+<a href="javascript:toggleFullscreen()">toggle fullscreen</a>
+<a href="/reboot">reboot</a>
+
+<script>
+function get(url) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+function onEffect(event) {
+    get('/play?effect='+event.target.id)
+}
+var effect_ids = [
+    {% for effect in effects %} 
+    '{{ effect }}',
+    {% endfor %}
+];
+for (var i = 0; i < effect_ids.length; i++) {
+    var e = document.getElementById(effect_ids[i]);
+    e.addEventListener("mousedown", onEffect, false);
+}
+
+function toggleFullscreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+	requestFullScreen.call(docEl);
+    } else {
+	cancelFullScreen.call(doc);
+    }
+}
+</script>
+
